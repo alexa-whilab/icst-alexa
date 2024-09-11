@@ -1,0 +1,3 @@
+python-dotenv
+ask-sdk-core
+requests==2.31.0
