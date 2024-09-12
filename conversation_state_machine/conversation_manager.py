@@ -1,38 +1,5 @@
-import json
-
-
-class State:
-    def get_speech(self, request_json, session_data):
-        raise NotImplementedError("Subclasses should implement this method.")
-    def get_next_state(self, session_data, request_data):
-        raise NotImplementedError("Subclasses should implement this method.")
-    
-class LaunchState(State):
-    def get_speech(self, user_utterance, session_data):
-        speech = "Hi, welcome to iCST activity! Do you want to start today's activity? "
-        return speech
-
-    def get_next_state(self, user_utterance, session_data):
-        # Custom logic: if session_data or user_input triggers a condition
-        if user_utterance == None:
-            return "LaunchState"
-        elif user_utterance == "yes":
-            return "WeatherDiscussionState"
-        elif user_utterance == "no":
-            return "EndState"
-        else:
-            return "LaunchState"
-    
-
-class WeatherDiscussionState(State):
-    def get_next_state(self, user_utterance, session_data):
-        # Custom logic: if session_data or user_input triggers a condition
-        return "WeatherDiscussionState"
-    
-    def get_speech(self, next_state, session_data):
-        return "hello"
-
-        
+from .states import LaunchState, WeatherDiscussionState
+     
 class ConversationManager:
     def __init__(self):
         self.states = {

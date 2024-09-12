@@ -23,7 +23,9 @@ from ask_sdk_model.dialog import (
     ElicitSlotDirective, DelegateDirective)
 
 from alexa import data, util
-from alexa.state_machine import ConversationManager
+
+from conversation_state_machine.conversation_manager import ConversationManager 
+
 
 
 sb = SkillBuilder()
