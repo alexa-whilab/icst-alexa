@@ -54,7 +54,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
         
         response_text = result['speech']
-        session_data['dialogue_state'] = result['next_state']
+        session_data['dialogue_state'] = result['state']
         return response_builder.speak(response_text).ask(response_text).response
 
 
@@ -73,7 +73,7 @@ class InfoIntentHandler(AbstractRequestHandler):
         print (session_data, user_utterance)
         result = conversation_manager.process_request(user_utterance, session_data)
         response_text = result['speech']
-        session_data['dialogue_state'] = result['next_state']
+        session_data['dialogue_state'] = result['state']
 
         return (
             response_builder

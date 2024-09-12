@@ -2,71 +2,65 @@ import json
 
 
 class State:
-    def handle_input(self, request_json, session_data):
+    def get_speech(self, request_json, session_data):
         raise NotImplementedError("Subclasses should implement this method.")
-    def determine_next_state(self, session_data, request_data):
+    def get_next_state(self, session_data, request_data):
         raise NotImplementedError("Subclasses should implement this method.")
     
 class LaunchState(State):
-    def handle_input(self, user_utterance, session_data):
-        next_state = self.determine_next_state(user_utterance, session_data)
-        speech = self.determine_speech(next_state)
-        return {"speech": speech, "next_state": next_state}
+    def get_speech(self, user_utterance, session_data):
+        speech = "Hi, welcome to iCST activity! Do you want to start today's activity? "
+        return speech
 
-    def determine_next_state(self, user_utterance, session_data):
+    def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition
         if user_utterance == None:
             return "LaunchState"
         elif user_utterance == "yes":
-            return "DiscussWeatherState"
+            return "WeatherDiscussionState"
         elif user_utterance == "no":
             return "EndState"
         else:
             return "LaunchState"
     
-    def determine_speech(self, next_state):
-        if next_state == "LaunchState":
-            speech = "Hi, welcome to iCST activity! Do you want to start today's activity? "
-        elif next_state == "DiscussWeatherState":
-            speech = "Let's discuss about today's weather! "
-        else:
-            speech = "Sorry, I have a trouble processing your request. "
-        return speech
 
-class DiscussWeatherState(State):
-    def handle_input(self, user_utterance, session_data):
-        next_state = self.determine_next_state(user_utterance, session_data)
-        speech = self.determine_speech(next_state)
-        return {"speech": speech, "next_state": next_state}
-
-    def determine_next_state(self, user_utterance, session_data):
+class WeatherDiscussionState(State):
+    def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition
-        pass
+        return "WeatherDiscussionState"
     
-    def determine_speech(self, next_state):
-        pass
+    def get_speech(self, next_state, session_data):
+        return "hello"
 
         
 class ConversationManager:
     def __init__(self):
         self.states = {
-            "LaunchState": LaunchState()
+            "LaunchState": LaunchState(),
+            "WeatherDiscussionState": WeatherDiscussionState(), 
         }
         self.initial_state = "LaunchState"
     
     def initate_conversation(self, user_utterance, session_data):
-        dialogue_state = self.initial_state
-        state_obj = self.states[dialogue_state]
-        result = state_obj.handle_input(user_utterance, session_data)
-        return result
+        current_state_str = self.initial_state
+        current_state_obj = self.states[current_state_str]
+
+        speech = current_state_obj.get_speech(user_utterance, session_data)
+        
+        return {"speech": speech, "state": current_state_str}
+
 
     def process_request(self, user_utterance, session_data):
-        dialogue_state = session_data.get('dialogue_state', self.initial_state)
+        prev_state_str = session_data.get('state', self.initial_state)
         
-        # Get the current state object
-        state_obj = self.states[dialogue_state]
+        # Get the previous state object
+        prev_state_obj = self.states[prev_state_str]
         
-        # Process the input and get the response and next state
-        result = state_obj.handle_input(user_utterance, session_data)
+        # update the current state based on user's input
+        current_state_str = prev_state_obj.get_next_state(user_utterance, session_data)
+        current_state_obj = self.states[current_state_str]
+
+        # Process the current state and get the response
+        speech = current_state_obj.get_speech(user_utterance, session_data)
         
-        return result
+        return {"speech": speech, "state": current_state_str}
