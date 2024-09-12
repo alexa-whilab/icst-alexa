@@ -21,3 +21,15 @@ def get_random_item(locale):
     """Return a random item from the locale specific dict."""
     # type: (str) -> str
     return random.choice(list(load_locale_specific_recipe(locale).keys()))
+
+
+def get_user_utterance(handler_input):
+    try:
+        # Attempt to get the intent and slot value
+        return handler_input.request_envelope.request.intent.slots["CatchAll"].value
+    except:
+        # otherwise return None
+        return None 
+
+def get_session_data(handler_input):
+    return handler_input.attributes_manager.session_attributes

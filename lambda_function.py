@@ -23,6 +23,7 @@ from ask_sdk_model.dialog import (
     ElicitSlotDirective, DelegateDirective)
 
 from alexa import data, util
+from alexa.state_machine import ConversationManager
 
 
 sb = SkillBuilder()
@@ -44,43 +45,17 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In LaunchRequestHandler")
-        _ = handler_input.attributes_manager.request_attributes["_"]
-
-        locale = handler_input.request_envelope.request.locale
-        item = util.get_random_item(locale)
-        url = "https://general-runtime.voiceflow.com/state/user/userEXAMPLE/interact?logs=off"
-        payload = {
-            "action": {
-                "type": "launch",
-            },
-            "config": {
-                "tts": False,
-                "stripSSML": True,
-                "stopAll": True,
-                "excludeTypes": ["block", "debug", "flow"]
-            }
-        }
-        headers = {
-            "accept": "application/json",
-            "content-type": "application/json",
-            "Authorization": api_key
-        }
-        
-        response1 = requests.post(url, json=payload, headers=headers)
-        data_json1 = response1.text
-        data1 = json.loads(data_json1)
-        
-        for item in data1:  # Corrected variable name from 'data' to 'data1'
-            # Check if the item is a dictionary and contains the keys 'type' and 'payload'
-            if isinstance(item, dict) and 'type' in item and 'payload' in item:
-                # Check if the payload is a dictionary and contains the key 'message'
-                if isinstance(item['payload'], dict) and 'message' in item['payload']:
-                    # Extract and print the message
-                    message1 = item['payload']['message']
-
-        speak_output = message1
         response_builder = handler_input.response_builder
-        return response_builder.speak(speak_output).ask(speak_output).response
+        conversation_manager = ConversationManager()
+        user_utterance = util.get_user_utterance(handler_input)
+        session_data = util.get_session_data(handler_input)
+        print (session_data, user_utterance)
+        result = conversation_manager.initate_conversation(user_utterance, session_data)
+
+        
+        response_text = result['speech']
+        session_data['dialogue_state'] = result['next_state']
+        return response_builder.speak(response_text).ask(response_text).response
 
 
 class InfoIntentHandler(AbstractRequestHandler):
@@ -91,47 +66,19 @@ class InfoIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         logger.info("In InfoIntentHandler")
-        url = "https://general-runtime.voiceflow.com/state/user/userEXAMPLE/interact?logs=off"
-        catch_all_slot_value = handler_input.request_envelope.request.intent.slots["CatchAll"].value
-        payload = {
-            "action": {
-                "type": "text",
-                "payload": catch_all_slot_value
-            },
-            "config": {
-                "tts": False,
-                "stripSSML": True,
-                "stopAll": True,
-                "excludeTypes": ["block", "debug", "flow"]
-            }
-        }
-        headers = {
-            "accept": "application/json",
-            "content-type": "application/json",
-            "Authorization": api_key
-        }
-        
-        response1 = requests.post(url, json=payload, headers=headers)
-        
-        data_json1 = response1.text
-        data1 = json.loads(data_json1)
-        
-        for item in data1:  # Corrected variable name from 'data' to 'data1'
-            # Check if the item is a dictionary and contains the keys 'type' and 'payload'
-            if isinstance(item, dict) and 'type' in item and 'payload' in item:
-                # Check if the payload is a dictionary and contains the key 'message'
-                if isinstance(item['payload'], dict) and 'message' in item['payload']:
-                    # Extract and print the message
-                    message1 = item['payload']['message']
-
-        speak_output = message1
-        print (response1.json())
         response_builder = handler_input.response_builder
+        conversation_manager = ConversationManager()
+        user_utterance = util.get_user_utterance(handler_input)
+        session_data = util.get_session_data(handler_input)
+        print (session_data, user_utterance)
+        result = conversation_manager.process_request(user_utterance, session_data)
+        response_text = result['speech']
+        session_data['dialogue_state'] = result['next_state']
 
         return (
             response_builder
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")
-                .speak(speak_output).ask("")
+                .speak(response_text).ask("")
                 .response
         )
 
