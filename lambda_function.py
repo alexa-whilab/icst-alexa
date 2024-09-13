@@ -23,7 +23,7 @@ from ask_sdk_model.dialog import (
     ElicitSlotDirective, DelegateDirective)
 
 from alexa import data, util
-
+from alexa.util import ChatHistory
 from conversation_state_machine.conversation_manager import ConversationManager 
 
 
@@ -39,7 +39,10 @@ load_dotenv()
 api_key = os.getenv('VOICEFLOW_API_KEY')
 
 class LaunchRequestHandler(AbstractRequestHandler):
-    """Handler for skill launch."""
+    """Handler for skill launch. 
+    This is triggered when the skill is first launched.
+    """
+
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_request_type("LaunchRequest")(handler_input)
@@ -47,16 +50,26 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In LaunchRequestHandler")
+        
+        # Sets up the response builder
         response_builder = handler_input.response_builder
+        
+        # Initializes the conversation manager to handle dialogue flow.
+        # Then uses the conversation manager to generate the next dialogue response.
         conversation_manager = ConversationManager()
         user_utterance = util.get_user_utterance(handler_input)
         session_data = util.get_session_data(handler_input)
         print (session_data, user_utterance)
         result = conversation_manager.initate_conversation(user_utterance, session_data)
 
-        
+        # Extracts the response text and updates session with the new dialogue state
         response_text = result['speech']
         session_data['dialogue_state'] = result['state']
+        
+         # Updates chat history with the current bot response
+        chat_history = ChatHistory()
+        chat_history.store_chat(bot_response=response_text)
+        session_data['chat_history'] = chat_history.get_chat_history()
         return response_builder.speak(response_text).ask(response_text).response
 
 
@@ -68,15 +81,28 @@ class InfoIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         logger.info("In InfoIntentHandler")
+        
+        # Sets up the response builder
         response_builder = handler_input.response_builder
+        
+        # Initializes the conversation manager to handle dialogue flow.
+        # Then uses the conversation manager to generate the next dialogue response.
         conversation_manager = ConversationManager()
         user_utterance = util.get_user_utterance(handler_input)
         session_data = util.get_session_data(handler_input)
         print (session_data, user_utterance)
         result = conversation_manager.process_request(user_utterance, session_data)
+        
+        # Extracts the response text and updates session with the new dialogue state
         response_text = result['speech']
         session_data['dialogue_state'] = result['state']
 
+         # Updates chat history with the current bot response
+        chat_history = ChatHistory(previous_history = session_data['chat_history'])
+        chat_history.store_chat(user_input=user_utterance, 
+                                bot_response=response_text)
+        session_data['chat_history'] = chat_history.get_chat_history()
+        print (session_data)
         return (
             response_builder
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")

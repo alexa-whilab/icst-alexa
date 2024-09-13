@@ -33,3 +33,23 @@ def get_user_utterance(handler_input):
 
 def get_session_data(handler_input):
     return handler_input.attributes_manager.session_attributes
+
+
+
+class ChatHistory:
+    def __init__(self, previous_history=""):
+        # Initialize the chat history with an optional previous history
+        self.chat_history = previous_history
+
+    def store_chat(self, user_input=None, bot_response=None):
+        # Append the formatted user input and bot response to the chat history
+        if user_input == None:
+            self.chat_history += f"Bot: {bot_response}\n"
+        elif bot_response == None:
+            self.chat_history += f"User: {user_input}\n"
+        else:
+            self.chat_history += f"User: {user_input}\nBot: {bot_response}\n"
+
+    def get_chat_history(self):
+        # Return the stored chat history
+        return self.chat_history
