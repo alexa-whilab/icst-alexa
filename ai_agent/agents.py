@@ -7,7 +7,9 @@ class YesNoAgent(BaseAgent):
         self.system_prompt = agent_system_prompt.YES_NO_AGENT
     
     def build_prompt(self, user_utterance):
-        system_prompt = self.system_prompt
-        human_prompt = user_utterance
-        return system_prompt, human_prompt
+        prompt =[
+            {"role": "system", "content": self.system_prompt},
+            {"role": "user", "content": user_utterance}
+        ]
+        return prompt
     

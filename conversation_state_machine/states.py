@@ -12,8 +12,9 @@ class LaunchState(BaseState):
         # Custom logic: if session_data or user_input triggers a condition=
         if user_utterance == None:
             return "LaunchState"
-        system_prompt, human_prompt = YesNoAgent().build_prompt(user_utterance)
-        response = YesNoAgent().generate_response_from_llm(system_prompt, human_prompt)
+        prompt = YesNoAgent().build_prompt(user_utterance)
+        response = YesNoAgent().generate_response_from_llm(prompt)
+        print ("response is:", response)
         if response == "True":
             return "WeatherDiscussionState"
         elif response == "False":
@@ -28,4 +29,4 @@ class WeatherDiscussionState(BaseState):
         return "WeatherDiscussionState"
     
     def get_speech(self, next_state, session_data):
-        return "hello"
+        return "At Weather Discussion State"

@@ -1,4 +1,4 @@
 python-dotenv
 ask-sdk-core
 requests==2.31.0
-langchain==0.2.16
+openai==1.45.0

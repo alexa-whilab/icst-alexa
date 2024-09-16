@@ -1,9 +1,7 @@
 import os
 from abc import ABC, abstractmethod
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
+from openai import OpenAI
 
 
 load_dotenv()
@@ -11,8 +9,8 @@ load_dotenv()
 
 class BaseAgent(ABC):
     def __init__(self):
-        self.model = ChatOpenAI(model="gpt-4", 
-                                api_key=os.getenv('OPENAI_API_KEY'))
+        self.model = "gpt-3.5-turbo"
+        self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.system_prompt = ""  # Placeholder to be defined by child classes
         
     @abstractmethod
@@ -24,12 +22,12 @@ class BaseAgent(ABC):
         pass
 
     
-    def generate_response_from_llm(self, system_prompt, human_prompt) -> str:
-        chat_prompt = ChatPromptTemplate.from_messages([
-            ("system", system_prompt),
-            ("human", human_prompt),
-        ])
-
-        chain = (chat_prompt | self.model | StrOutputParser())
-        response = chain.invoke({})
-        return response
+    def generate_response_from_llm(self, prompt) -> str:
+        completion = self.client.chat.completions.create(
+            # Use GPT 3.5 as the LLM
+            model=self.model,
+            # Pre-define conversation messages for the possible roles 
+            messages=prompt
+            )
+        
+        return completion.choices[0].message.content
