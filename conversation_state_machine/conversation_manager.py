@@ -14,11 +14,11 @@ class ConversationManager:
 
         speech = current_state_obj.get_speech(user_utterance, session_data)
         
-        return {"speech": speech, "state": current_state_str}
+        return speech
 
 
     def process_request(self, user_utterance, session_data):
-        prev_state_str = session_data.get('state', self.initial_state)
+        prev_state_str = session_data.get('dialogue_state', self.initial_state)
         
         # Get the previous state object
         prev_state_obj = self.states[prev_state_str]
@@ -27,7 +27,10 @@ class ConversationManager:
         current_state_str = prev_state_obj.get_next_state(user_utterance, session_data)
         current_state_obj = self.states[current_state_str]
 
+        # Call update_session_data if it exists
+        current_state_obj.update_session_data(session_data)
+
         # Process the current state and get the response
         speech = current_state_obj.get_speech(user_utterance, session_data)
         
-        return {"speech": speech, "state": current_state_str}
+        return speech

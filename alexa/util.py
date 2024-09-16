@@ -36,7 +36,7 @@ def get_session_data(handler_input):
 
 
 
-class ChatHistory:
+class ChatHistoryLogger:
     def __init__(self, previous_history=""):
         # Initialize the chat history with an optional previous history
         self.chat_history = previous_history

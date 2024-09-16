@@ -23,7 +23,7 @@ from ask_sdk_model.dialog import (
     ElicitSlotDirective, DelegateDirective)
 
 from alexa import data, util
-from alexa.util import ChatHistory
+from alexa.util import ChatHistoryLogger
 from conversation_state_machine.conversation_manager import ConversationManager 
 
 
@@ -59,17 +59,14 @@ class LaunchRequestHandler(AbstractRequestHandler):
         conversation_manager = ConversationManager()
         user_utterance = util.get_user_utterance(handler_input)
         session_data = util.get_session_data(handler_input)
-        print (session_data, user_utterance)
-        result = conversation_manager.initate_conversation(user_utterance, session_data)
-
-        # Extracts the response text and updates session with the new dialogue state
-        response_text = result['speech']
-        session_data['dialogue_state'] = result['state']
+        response_text = conversation_manager.initate_conversation(user_utterance, session_data)
         
          # Updates chat history with the current bot response
-        chat_history = ChatHistory()
-        chat_history.store_chat(bot_response=response_text)
-        session_data['chat_history'] = chat_history.get_chat_history()
+        chat_history_logger = ChatHistoryLogger()
+        chat_history_logger.store_chat(bot_response=response_text)
+        session_data['chat_history'] = chat_history_logger.get_chat_history()
+        print("session_data", session_data)
+        print("user_utterance", user_utterance)
         return response_builder.speak(response_text).ask(response_text).response
 
 
@@ -90,19 +87,15 @@ class InfoIntentHandler(AbstractRequestHandler):
         conversation_manager = ConversationManager()
         user_utterance = util.get_user_utterance(handler_input)
         session_data = util.get_session_data(handler_input)
-        print (session_data, user_utterance)
-        result = conversation_manager.process_request(user_utterance, session_data)
-        
-        # Extracts the response text and updates session with the new dialogue state
-        response_text = result['speech']
-        session_data['dialogue_state'] = result['state']
+        response_text = conversation_manager.process_request(user_utterance, session_data)
 
          # Updates chat history with the current bot response
-        chat_history = ChatHistory(previous_history = session_data['chat_history'])
-        chat_history.store_chat(user_input=user_utterance, 
+        chat_history_logger = ChatHistoryLogger(previous_history = session_data['chat_history'])
+        chat_history_logger.store_chat(user_input=user_utterance, 
                                 bot_response=response_text)
-        session_data['chat_history'] = chat_history.get_chat_history()
-        print (session_data)
+        session_data['chat_history'] = chat_history_logger.get_chat_history()
+        print("session_data", session_data)
+        print("user_utterance", user_utterance)
         return (
             response_builder
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")
