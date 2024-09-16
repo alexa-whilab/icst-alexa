@@ -1,10 +1,11 @@
-from .states import LaunchState, WeatherDiscussionState
+from .states import LaunchState, WeatherDiscussionState, EndState
      
 class ConversationManager:
     def __init__(self):
         self.states = {
             "LaunchState": LaunchState(),
             "WeatherDiscussionState": WeatherDiscussionState(), 
+            "EndState": EndState()
         }
         self.initial_state = "LaunchState"
     

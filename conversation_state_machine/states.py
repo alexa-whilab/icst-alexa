@@ -43,4 +43,17 @@ class WeatherDiscussionState(BaseState):
         session_data['weather_count'] = session_data.get('weather_count', 0) + 1
         session_data['dialogue_state'] = self.name
     
-    
+
+class EndState(BaseState):
+    def __init__(self):
+        self.name = "EndState"
+    def get_speech(self, user_utterance, session_data):
+        speech = "Good bye, see you next time!"
+        return speech
+
+    def get_next_state(self, user_utterance, session_data):
+        # Custom logic: if session_data or user_input triggers a condition=
+        pass
+    def update_session_data(self, session_data):
+        # Custom update logic
+        session_data['dialogue_state'] = self.name

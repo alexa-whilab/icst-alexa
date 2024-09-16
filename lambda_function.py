@@ -96,12 +96,19 @@ class InfoIntentHandler(AbstractRequestHandler):
         session_data['chat_history'] = chat_history_logger.get_chat_history()
         print("session_data", session_data)
         print("user_utterance", user_utterance)
+        if session_data['dialogue_state'] == 'EndState':
+            return (
+                response_builder
+                    .speak(response_text)
+                    .set_should_end_session(True)
+                    .response
+                    )
         return (
             response_builder
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")
                 .speak(response_text).ask("")
                 .response
-        )
+                )
 
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
