@@ -63,7 +63,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
         
          # Updates chat history with the current bot response
         chat_history_logger = ChatHistoryLogger()
-        chat_history_logger.store_chat(bot_response=response_text)
+        chat_history_logger.append_to_chat_history(bot_response=response_text)
         session_data['chat_history'] = chat_history_logger.get_chat_history()
         print("session_data", session_data)
         print("user_utterance", user_utterance)
@@ -91,7 +91,7 @@ class InfoIntentHandler(AbstractRequestHandler):
 
          # Updates chat history with the current bot response
         chat_history_logger = ChatHistoryLogger(previous_history = session_data['chat_history'])
-        chat_history_logger.store_chat(user_input=user_utterance, 
+        chat_history_logger.append_to_chat_history(user_input=user_utterance, 
                                 bot_response=response_text)
         session_data['chat_history'] = chat_history_logger.get_chat_history()
         print("session_data", session_data)

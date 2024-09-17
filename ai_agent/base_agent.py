@@ -22,7 +22,7 @@ class BaseAgent(ABC):
         pass
 
     
-    def generate_response_from_llm(self, prompt) -> str:
+    def generate_response_from_llm(self, prompt):
         completion = self.client.chat.completions.create(
             # Use GPT 3.5 as the LLM
             model=self.model,
@@ -31,3 +31,17 @@ class BaseAgent(ABC):
             )
         
         return completion.choices[0].message.content
+
+    def _parse_conversation_history(self, chat_history):
+        parts = chat_history.split("|")
+        
+        # Initialize an empty list to store the dictionary entries
+        conversation_list = []
+
+        # Loop through each part and split by ": " to get role and content
+        for part in parts:
+            if ":" in part:
+                role, content = part.split(":", 1)
+                conversation_list.append({"role": role, "content": content})    
+        return conversation_list
+

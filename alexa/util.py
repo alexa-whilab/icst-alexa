@@ -41,14 +41,14 @@ class ChatHistoryLogger:
         # Initialize the chat history with an optional previous history
         self.chat_history = previous_history
 
-    def store_chat(self, user_input=None, bot_response=None):
+    def append_to_chat_history(self, user_input=None, bot_response=None):
         # Append the formatted user input and bot response to the chat history
         if user_input == None:
-            self.chat_history += f"Bot: {bot_response}\n"
+            self.chat_history += f"assistant:{bot_response}|"
         elif bot_response == None:
-            self.chat_history += f"User: {user_input}\n"
+            self.chat_history += f"user:{user_input}|"
         else:
-            self.chat_history += f"User: {user_input}\nBot: {bot_response}\n"
+            self.chat_history += f"user:{user_input}|assistant:{bot_response}|"
 
     def get_chat_history(self):
         # Return the stored chat history

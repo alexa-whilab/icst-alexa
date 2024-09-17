@@ -28,7 +28,7 @@ class ConversationManager:
         current_state_str = prev_state_obj.get_next_state(user_utterance, session_data)
         current_state_obj = self.states[current_state_str]
 
-        # Call update_session_data if it exists
+        # Call update_session_data 
         current_state_obj.update_session_data(session_data)
 
         # Process the current state and get the response
