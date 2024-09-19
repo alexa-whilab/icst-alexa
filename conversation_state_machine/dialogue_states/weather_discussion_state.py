@@ -13,8 +13,23 @@ class WeatherDiscussionState(BaseState):
         response = WeatherDiscussionAgent().generate_response_from_llm(prompt)
         return response
     
-    def get_display(self, response_builder, user_utterance, session_data=None):
-        pass
+    def render_display(self, response_builder, user_utterance, response_text, session_data=None):
+        apl_document_token = 'background_1'
+        commands = [
+                    {
+                        "type": "SetValue",
+                        "componentId": "WelcomeText",
+                        "property": "text",
+                        "value": "response_text"
+                    }
+                ]
+        
+        print ('I am in here. ')
+        return execute_command(
+            response_builder=response_builder,
+            token = apl_document_token, 
+            commands = commands
+        )
 
     def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition

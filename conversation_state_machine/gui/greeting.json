@@ -53,9 +53,11 @@
                         "top": "20vh",
                         "left": "27vw",
                         "position": "absolute",
+                        "id": "title container", 
                         "items": [
                             {
                                 "type": "Text",
+                                "id":"WelcomeText",
                                 "textAlign": "center",
                                 "text": "<i>Welcome!</i>",
                                 "fontWeight": "800",

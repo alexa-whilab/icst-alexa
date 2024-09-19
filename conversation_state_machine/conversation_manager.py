@@ -16,10 +16,10 @@ class ConversationManager:
         current_state_str = self.initial_state
         current_state_obj = self.states[current_state_str]
 
-        speech = current_state_obj.get_speech(user_utterance, session_data)
-        response_builder = current_state_obj.render_display(response_builder, user_utterance, session_data)
+        response_text = current_state_obj.get_speech(user_utterance, session_data)
+        response_builder = current_state_obj.render_display(response_builder, user_utterance, response_text, session_data)
         
-        return speech, response_builder
+        return response_text, response_builder
 
 
     def process_request(self, response_builder, user_utterance, session_data):
@@ -33,10 +33,10 @@ class ConversationManager:
         current_state_obj = self.states[current_state_str]
 
         # Process the current state and get the response
-        speech = current_state_obj.get_speech(user_utterance, session_data)
-        response_builder = current_state_obj.render_display(response_builder, user_utterance, session_data)
+        response_text = current_state_obj.get_speech(user_utterance, session_data)
+        response_builder = current_state_obj.render_display(response_builder, user_utterance, response_text, session_data)
     
         # Call update_session_data 
         current_state_obj.update_session_data(session_data)
         
-        return speech, response_builder
+        return response_text, response_builder

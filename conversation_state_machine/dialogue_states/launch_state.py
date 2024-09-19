@@ -9,11 +9,12 @@ class LaunchState(BaseState):
         self.name = "LaunchState"
     
     def get_speech(self, user_utterance=None, session_data=None):
-        speech = "Hi, welcome to iCST activity! Do you want to start today's activity? "
-        return speech
+        response_text = "Hi, welcome to iCST activity! Do you want to start today's activity? "
+        return response_text
 
-    def render_display(self, response_builder, user_utterance=None, session_data=None):
+    def render_display(self, response_builder, user_utterance=None, response_text=None, session_data=None):
         return render_document(response_builder = response_builder,
+                               token = 'background_1',
                                document = "/gui/greeting.json")
 
     def get_next_state(self, user_utterance, session_data):

@@ -12,18 +12,17 @@ def load_apl_document(file_path):
     with open(current_dir + file_path) as f:
         return json.load(f)
 
-def render_document(response_builder, document, datasources=None):
+def render_document(response_builder, token, document, datasources=None):
     response_builder.add_directive(
     RenderDocumentDirective(
-        token = document,
+        token = token,
         document = load_apl_document(document),
         datasources = datasources))
     return response_builder
 
-def execute_command(response_builder, command, datasources=None):
+def execute_command(response_builder,token, commands):
     response_builder.add_directive(
     ExecuteCommandsDirective(
-        token = command,
-        command = load_apl_document(command),
-        datasources = datasources))
+        token = token,
+        commands = commands))
     return response_builder
