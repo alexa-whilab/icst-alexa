@@ -15,8 +15,13 @@ class LaunchState(BaseState):
     def render_display(self, response_builder, user_utterance=None, response_text=None, session_data=None):
         return render_document(response_builder = response_builder,
                                token = 'background_1',
-                               document = "/gui/greeting.json")
-
+                               document = "/gui/greeting.json",
+                               datasources={
+                                   "LambdaData":{
+                                       "titleText": "Welcome to iCST Practice!!",
+                                   }
+                                   }
+                               )
     def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition=
         if user_utterance == None:

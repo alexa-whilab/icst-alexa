@@ -4,6 +4,9 @@ import random
 from . import data
 from typing import Dict
 
+from ask_sdk_model.interfaces.alexa.presentation.apl import (
+    RenderDocumentDirective, ExecuteCommandsDirective)
+
 def load_locale_specific_recipe(locale):
     """Return the recipe dictionary specific to the locale.
 
@@ -53,3 +56,47 @@ class ChatHistoryLogger:
     def get_chat_history(self):
         # Return the stored chat history
         return self.chat_history
+    
+
+def contains_apl_speak_item(response_builder):
+    # Recursive function to check for 'SpeakItem' in the directives
+    '''
+    the command format must be
+    [{
+        "type": "Sequential",
+        "commands": [
+            {
+            }
+        ]
+    ]
+    
+    In other words, there must be a wrapper outside the series of 
+    commands. However, it does not always have to be Sequential. 
+    
+    '''
+    def contains_speak_item(directive):
+        command_groups = getattr(directive, "commands", None)
+        if not command_groups:
+            return False
+        for command_group in command_groups:
+            commands = command_group.get('commands', None)
+            if commands:
+                for command in commands:
+                    print ('here3', command)
+                    if command.get('type') == 'SpeakItem':
+                        return True
+            return False
+    
+    # Check each directive in the response
+    response = getattr(response_builder, 'response', None)
+
+    # Check if the response has directives, and if they are accessible
+    if response is None:
+        return False
+    # Access directives in response (ensure response is a dictionary-like object)
+    response_directives = getattr(response, 'directives', [])
+    for directive in response_directives:
+        if contains_speak_item(directive):
+            return True
+    print ('False')
+    return False  # No SpeakItem found in the response directives

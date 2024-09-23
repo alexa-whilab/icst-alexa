@@ -102,6 +102,14 @@ class InfoIntentHandler(AbstractRequestHandler):
                     .set_should_end_session(True)
                     .response
                     )
+        if util.contains_apl_speak_item(response_builder):
+            print ('here')
+            return (
+                response_builder
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .ask(response_text)
+                .response
+            )
         return (
             response_builder
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")

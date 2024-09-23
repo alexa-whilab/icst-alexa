@@ -1,0 +1,202 @@
+{
+    "type": "APL",
+    "version": "1.3",
+    "settings": {},
+    "theme": "dark",
+    "import": [
+        {
+            "name": "alexa-layouts",
+            "version": "1.7.0"
+        }
+    ],
+    "resources": [
+        {
+            "colors": {
+                "Background": "#F79AC0",
+                "myBlue": "#66DFFF"
+            }
+        }
+    ],
+    "styles": {},
+    "onMount": [
+{
+            "type": "Sequential",
+            "commands": [
+                {
+                    "type": "AnimateItem",
+                    "easing": "ease-in-out",
+                    "componentId": "APL_Page",
+                    "duration": 700,
+                    "value": [
+                        {
+                            "property": "opacity",
+                            "from": 0,
+                            "to": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "Idle",
+                    "delay": 1000
+                },
+                {
+                    "type": "AnimateItem",
+                    "easing": "ease-in-out",
+                    "componentId": "title_text_container",
+                    "duration": 700,
+                    "value": [
+                        {
+                            "property": "opacity",
+                            "to": 0
+                        }
+                    ]
+                },
+                {
+                    "type": "Idle",
+                    "delay": 1000
+                },
+                {
+                    "type": "SetValue",
+                    "componentId": "response_text",
+                    "property": "text",
+                    "value": "hello"
+                },
+                {
+                    "type": "SetValue",
+                    "componentId": "response_text",
+                    "property": "speech",
+                    "value": "hello"
+                },
+                {
+                    "type": "AnimateItem",
+                    "easing": "ease-in-out",
+                    "componentId": "response_text_container",
+                    "duration": 700,
+                    "value": [
+                        {
+                            "property": "opacity",
+                            "from": 0,
+                            "to": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "SpeakItem",
+                    "componentId": "response_text"
+                },
+                {
+                    "type": "AnimateItem",
+                    "easing": "ease-in-out",
+                    "componentId": "response_text_container",
+                    "duration": 700,
+                    "value": [
+                        {
+                            "property": "opacity",
+                            "to": 0
+                        }
+                    ]
+                },
+                {
+                    "type": "SetValue",
+                    "componentId": "response_text",
+                    "property": "text",
+                    "value": "bye"
+                },
+                {
+                    "type": "SetValue",
+                    "componentId": "response_text",
+                    "property": "speech",
+                    "value": "bye"
+                },
+                {
+                    "type": "AnimateItem",
+                    "easing": "ease-in-out",
+                    "componentId": "response_text_container",
+                    "duration": 700,
+                    "value": [
+                        {
+                            "property": "opacity",
+                            "from": 0,
+                            "to": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "SpeakItem",
+                    "componentId": "response_text"
+                }
+            ]
+        }
+    ],
+    "graphics": {},
+    "commands": {},
+    "layouts": {
+    },
+    "mainTemplate": {
+        "items": [
+            {
+                "type": "Container",
+                "id": "APL_Page",
+                "opacity": 0,
+                "description": "the highest level of the container.",
+                "height": "100vh", 
+                "width": "100vw",
+                "justifyContent": "center", 
+                "alignItems": "center",      
+                "items": [
+                    {
+                        "type": "Image",
+                        "source": "https://alexa-whilab.s3.us-east-2.amazonaws.com/iCST/gui/background.jpg",
+                        "description": "background",
+                        "scale": "best-fill",
+                        "width": "100vw",
+                        "height": "100vh"
+                    },
+                    {
+                        "type": "Container",
+                        "width": "80vw",
+                        "height": "30vh",
+                        "id": "title_text_container",
+                        "opacity": 1,
+                        "position": "absolute",
+                        "justifyContent": "center",
+                        "alignItems": "center",
+                        "items": [
+                        {
+                            "type": "Text",
+                            "id": "title_text",
+                            "text": "okay okay okay okay okay",
+                            "fontSize": "70dp",
+                            "color": "white",
+                            "textAlign": "center"
+                        }
+                        ]
+                    },
+                    {
+                        "type": "Container",
+                        "position": "absolute",
+                        "width": "60vw",
+                        "height": "30vh",
+                        "id": "response_text_container",
+                        "opacity": 0,
+                        "items": [
+                            {
+                                "type": "Text",
+                                "id": "response_text",
+                                "style": "karaokeStyle",
+                                "text": "okay",
+                                "speech": "okay",
+                                "paddingTop": 40,
+                                "fontSize": "6vh",
+                                "fontWeight": "300"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "parameters": [
+            "LambdaData"
+        ]
+    }
+}
