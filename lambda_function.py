@@ -64,8 +64,6 @@ class LaunchRequestHandler(AbstractRequestHandler):
         chat_history_logger = ChatHistoryLogger()
         chat_history_logger.append_to_chat_history(bot_response=response_text)
         session_data['chat_history'] = chat_history_logger.get_chat_history()
-        print("session_data", session_data)
-        print("user_utterance", user_utterance)
         return response_builder.speak(response_text).ask(response_text).response
 
 
@@ -93,8 +91,6 @@ class InfoIntentHandler(AbstractRequestHandler):
         chat_history_logger.append_to_chat_history(user_input=user_utterance, 
                                 bot_response=response_text)
         session_data['chat_history'] = chat_history_logger.get_chat_history()
-        print("session_data", session_data)
-        print("user_utterance", user_utterance)
         if session_data['dialogue_state'] == 'EndState':
             return (
                 response_builder
@@ -102,14 +98,6 @@ class InfoIntentHandler(AbstractRequestHandler):
                     .set_should_end_session(True)
                     .response
                     )
-        if util.contains_apl_speak_item(response_builder):
-            print ('here')
-            return (
-                response_builder
-                # .ask("add a reprompt if you want to keep the session open for the user to respond")
-                .ask(response_text)
-                .response
-            )
         return (
             response_builder
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")

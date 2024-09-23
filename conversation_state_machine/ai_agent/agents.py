@@ -17,9 +17,9 @@ class YesNoAgent(BaseAgent):
 class WeatherDiscussionAgent(BaseAgent):
     def __init__(self):
         super().__init__()
-        self.system_prompt = agent_system_prompt.WEATHER_DISCUSSION_AGENT
     
-    def build_prompt(self, user_utterance, session_data):
+    def build_prompt(self, user_utterance, session_data, state):
+        self.system_prompt = agent_system_prompt.WEATHER_DISCUSSION_AGENT[state]
         prompt = [
             {"role": "system", "content": self.system_prompt}
         ]

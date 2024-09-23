@@ -9,10 +9,8 @@ load_dotenv()
 
 class BaseAgent(ABC):
     def __init__(self):
-        self.model = "gpt-3.5-turbo"
-        print ('here', os.environ.get("OPENAI_API_KEY"))
+        self.model = "gpt-4o"
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        print ('success')
         self.system_prompt = ""  # Placeholder to be defined by child classes
         
     @abstractmethod

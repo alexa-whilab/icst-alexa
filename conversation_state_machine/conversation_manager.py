@@ -1,5 +1,5 @@
 from .dialogue_states.launch_state import LaunchState
-from .dialogue_states.weather_discussion_state import WeatherDiscussionState
+from .dialogue_states.weather_discussion_state import WeatherDiscussionState, WeatherDiscussionStateTail
 from .dialogue_states.end_state import EndState
 
 
@@ -8,6 +8,7 @@ class ConversationManager:
         self.states = {
             "LaunchState": LaunchState(),
             "WeatherDiscussionState": WeatherDiscussionState(), 
+            "WeatherDiscussionStateTail": WeatherDiscussionStateTail(),
             "EndState": EndState()
         }
         self.initial_state = "LaunchState"
@@ -23,12 +24,21 @@ class ConversationManager:
 
 
     def process_request(self, response_builder, user_utterance, session_data):
+        """
+        Processes the user's input and manages conversation state transitions.
+
+        1. Retrieves the previous state from session data, defaulting to the initial state if absent.
+           Note this previous state was already being processed. 
+        2. Given the new utterance from user. process_request will determine the current dialogue state (i.e. what should be the response to the user).
+
+        """
         prev_state_str = session_data.get('dialogue_state', self.initial_state)
         
         # Get the previous state object
         prev_state_obj = self.states[prev_state_str]
         
         # update the current state based on user's input
+        print (prev_state_str)
         current_state_str = prev_state_obj.get_next_state(user_utterance, session_data)
         current_state_obj = self.states[current_state_str]
 

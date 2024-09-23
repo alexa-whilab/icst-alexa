@@ -1,8 +1,11 @@
 
+import logging
 from ..base_state import BaseState
 from ..ai_agent.agents import YesNoAgent
 from ..util import render_document, execute_command
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 class LaunchState(BaseState):
     def __init__(self):
@@ -28,6 +31,7 @@ class LaunchState(BaseState):
             return "LaunchState"
         prompt = YesNoAgent().build_prompt(user_utterance)
         response = YesNoAgent().generate_response_from_llm(prompt)
+        logger.info('%s %s %s', self.name, 'get_next_state', response)
         if response == "True":
             return "WeatherDiscussionState"
         elif response == "False":

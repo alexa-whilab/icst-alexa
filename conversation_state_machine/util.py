@@ -27,7 +27,7 @@ def execute_command(response_builder,token, commands):
         commands = commands))
     return response_builder
 
-def animate_display_change(disappear_element_id, appear_element_id, new_text_id = None, new_text=None, speak_item=False):
+def animate_display_change(disappear_element_id, appear_element_id=None, new_text_id = None, new_text=None, speak_item=False):
     command = [{
         "type": "Sequential",
         "commands": [
@@ -56,19 +56,20 @@ def animate_display_change(disappear_element_id, appear_element_id, new_text_id 
         })
 
     # Add the animation for the appearing element
-    command[0]["commands"].append({
-        "type": "AnimateItem",
-        "easing": "ease-in-out",
-        "componentId": appear_element_id,
-        "duration": 700,
-        "value": [
-            {
-                "property": "opacity",
-                "from": 0,
-                "to": 1
-            }
-        ]
-    })
+    if appear_element_id:
+        command[0]["commands"].append({
+            "type": "AnimateItem",
+            "easing": "ease-in-out",
+            "componentId": appear_element_id,
+            "duration": 700,
+            "value": [
+                {
+                    "property": "opacity",
+                    "from": 0,
+                    "to": 1
+                }
+            ]
+        })
     # If speak_item, add the SpeakItem command to speak the text
     if speak_item == True:
         command[0]["commands"].append({
