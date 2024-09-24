@@ -35,7 +35,7 @@ class LaunchState(BaseState):
         if response == "True":
             return "WeatherDiscussionState"
         elif response == "False":
-            return "EndState"
+            return "GoodbyeState"
         else:
             return "LaunchState"
     

@@ -65,7 +65,7 @@ class WeatherDiscussionStateTail(BaseState):
         if response == "True":
             return "ICSTActivityState"
         elif response == "False":
-            return "EndState"
+            return "GoodbyeState"
     
     def update_session_data(self, session_data):
         # Custom update logic

@@ -1,7 +1,7 @@
 from .dialogue_states.launch_state import LaunchState
 from .dialogue_states.weather_discussion_state import WeatherDiscussionState, WeatherDiscussionStateTail
 from .dialogue_states.icst_state import ICSTActivityState
-from .dialogue_states.end_state import EndState
+from .dialogue_states.goodbye_state import GoodbyeState
 
 
 class ConversationManager:
@@ -11,7 +11,7 @@ class ConversationManager:
             "WeatherDiscussionState": WeatherDiscussionState(), 
             "WeatherDiscussionStateTail": WeatherDiscussionStateTail(),
             "ICSTActivityState": ICSTActivityState(),
-            "EndState": EndState()
+            "GoodbyeState": GoodbyeState()
         }
         self.initial_state = "LaunchState"
     

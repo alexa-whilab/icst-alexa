@@ -39,7 +39,7 @@ class ICSTActivityState(BaseState):
             response = ICSTActivityAgent().generate_response_from_llm(prompt)
             logger.info('%s %s %s', self.name, 'get_next_state', response)
             if response == "True":
-                return "EndState"
+                return "GoodbyeState"
         return self.name
     
     def update_session_data(self, session_data):
