@@ -34,7 +34,7 @@ class ICSTActivityState(BaseState):
 
     def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition
-        if session_data.get("icst_count", 0) >= 1:
+        if session_data.get("icst_count", 0) >= 5:
             prompt = ICSTActivityAgent().build_prompt(user_utterance, session_data, state="CHECK_TRANSITION")
             response = ICSTActivityAgent().generate_response_from_llm(prompt)
             logger.info('%s %s %s', self.name, 'get_next_state', response)
