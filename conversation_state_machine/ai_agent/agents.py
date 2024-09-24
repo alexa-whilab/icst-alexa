@@ -23,9 +23,10 @@ class WeatherDiscussionAgent(BaseAgent):
         prompt = [
             {"role": "system", "content": self.system_prompt}
         ]
-        parsed_conversation = self._parse_conversation_history(session_data['chat_history'])
+        parsed_conversation = self._parse_conversation_history(session_data.get('weather_chat_history', ""))
         prompt.extend(parsed_conversation)
-        prompt.append({"role": "user", "content": user_utterance})
+        if "weather_chat_history" in session_data:
+            prompt.append({"role": "user", "content": user_utterance})
         print ("prompt", prompt)
         return prompt
         
@@ -39,9 +40,10 @@ class ICSTActivityAgent(BaseAgent):
         prompt = [
             {"role": "system", "content": self.system_prompt}
         ]
-        parsed_conversation = self._parse_conversation_history(session_data['chat_history'])
+        parsed_conversation = self._parse_conversation_history(session_data.get('iCST_chat_history', ""))
         prompt.extend(parsed_conversation)
-        prompt.append({"role": "user", "content": user_utterance})
+        if "iCST_chat_history" in session_data:
+            prompt.append({"role": "user", "content": user_utterance})
         print ("prompt", prompt)
         return prompt
     
@@ -54,8 +56,7 @@ class GoodbyeAgent(BaseAgent):
         prompt = [
             {"role": "system", "content": self.system_prompt}
         ]
-        parsed_conversation = self._parse_conversation_history(session_data['chat_history'])
-        prompt.extend(parsed_conversation)
-        prompt.append({"role": "user", "content": user_utterance})
+        user_prompt = session_data['chat_history'] + "user:" + user_utterance
+        prompt.append({"role": "user", "content": user_prompt})
         print ("prompt", prompt)
         return prompt

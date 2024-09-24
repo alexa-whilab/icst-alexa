@@ -1,15 +1,21 @@
 
+import logging
 from ..base_state import BaseState
 from ..ai_agent.agents import GoodbyeAgent 
 from ..util import render_document, execute_command, animate_display_change
 
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 class GoodbyeState(BaseState):
     def __init__(self):
-        self.name = "EndState"
+        self.name = "GoodbyeState"
     
     def get_speech(self, user_utterance, session_data):
         prompt = GoodbyeAgent().build_prompt(user_utterance, session_data)
         response = GoodbyeAgent().generate_response_from_llm(prompt)
+        logger.info('%s %s %s', self.name, 'get_next_state', response)
         return response
 
     def render_display(self, response_builder, user_utterance, response_text, session_data=None):
@@ -31,6 +37,6 @@ class GoodbyeState(BaseState):
         pass
     
 
-    def update_session_data(self, session_data):
+    def update_session_data(self, user_utterance, response_text, session_data):
         # Custom update logic
         session_data['dialogue_state'] = self.name

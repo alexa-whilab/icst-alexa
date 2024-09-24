@@ -3,6 +3,7 @@ import logging
 from ..base_state import BaseState
 from ..ai_agent.agents import ICSTActivityAgent, YesNoAgent
 from ..util import render_document, execute_command, animate_display_change
+from alexa.util import ChatHistoryLogger
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -19,18 +20,18 @@ class ICSTActivityState(BaseState):
     
     def render_display(self, response_builder, user_utterance, response_text, session_data=None):
         apl_document_token = 'background_1' # defined in the LaunchState()
-        commands = []
         if session_data.get("icst_count",0) == 0:
             commands = animate_display_change(
                 appear_element_id="response_text_container",
                 new_text_id="response_text",
                 new_text="An apple a day keeps the doctor away. "
             )
-        return execute_command(
-            response_builder=response_builder,
-            token = apl_document_token, 
-            commands = commands
-        )
+            return execute_command(
+                response_builder=response_builder,
+                token = apl_document_token, 
+                commands = commands
+            )
+        return response_builder
 
     def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition
@@ -41,11 +42,21 @@ class ICSTActivityState(BaseState):
             if response == "True":
                 return "GoodbyeState"
         return self.name
-    
-    def update_session_data(self, session_data):
+
+    def _log_dialogue_state_chat_history(self, user_utterance, response_text, session_data):
+        chat_history_logger = ChatHistoryLogger(previous_history = session_data.get("iCST_chat_history", ""))
+        if "iCST_chat_history" not in session_data:
+            chat_history_logger.append_to_chat_history(bot_response=response_text)
+        else:
+            chat_history_logger.append_to_chat_history(user_input=user_utterance, 
+                                    bot_response=response_text)
+        return chat_history_logger.get_chat_history()
+
+    def update_session_data(self, user_utterance, response_text, session_data):
         # Custom update logic
         session_data['icst_count'] = session_data.get('icst_count', 0) + 1
         session_data['dialogue_state'] = self.name
+        session_data['iCST_chat_history'] = self._log_dialogue_state_chat_history(user_utterance, response_text, session_data)
 
 
 

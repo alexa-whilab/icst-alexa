@@ -3,6 +3,7 @@ import logging
 from ..base_state import BaseState
 from ..ai_agent.agents import WeatherDiscussionAgent, YesNoAgent
 from ..util import render_document, execute_command, animate_display_change
+from alexa.util import ChatHistoryLogger
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -38,10 +39,22 @@ class WeatherDiscussionState(BaseState):
                 return "WeatherDiscussionStateTail"
         return self.name
     
-    def update_session_data(self, session_data):
+    def _log_dialogue_state_chat_history(self, user_utterance, response_text, session_data):
+        chat_history_logger = ChatHistoryLogger(previous_history = session_data.get("weather_chat_history", ""))
+        if "weather_chat_history" not in session_data:
+            chat_history_logger.append_to_chat_history(bot_response=response_text)
+        else:
+            chat_history_logger.append_to_chat_history(user_input=user_utterance, 
+                                    bot_response=response_text)
+        return chat_history_logger.get_chat_history()
+
+    def update_session_data(self, user_utterance, response_text, session_data):
         # Custom update logic
         session_data['weather_count'] = session_data.get('weather_count', 0) + 1
         session_data['dialogue_state'] = self.name
+        session_data['weather_chat_history'] = self._log_dialogue_state_chat_history(user_utterance, response_text, session_data)
+
+
 
 
 
@@ -67,7 +80,7 @@ class WeatherDiscussionStateTail(BaseState):
         elif response == "False":
             return "GoodbyeState"
     
-    def update_session_data(self, session_data):
+    def update_session_data(self, user_utterance, response_text, session_data):
         # Custom update logic
         session_data['dialogue_state'] = self.name
 

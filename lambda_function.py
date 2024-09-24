@@ -49,7 +49,6 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        logger.info("In LaunchRequestHandler")
         
         # Sets up the response builder
         response_builder = handler_input.response_builder
@@ -74,7 +73,6 @@ class InfoIntentHandler(AbstractRequestHandler):
         return is_request_type("IntentRequest")(handler_input)
 
     def handle(self, handler_input):
-        logger.info("In InfoIntentHandler")
         
         # Sets up the response builder
         response_builder = handler_input.response_builder
@@ -91,7 +89,8 @@ class InfoIntentHandler(AbstractRequestHandler):
         chat_history_logger.append_to_chat_history(user_input=user_utterance, 
                                 bot_response=response_text)
         session_data['chat_history'] = chat_history_logger.get_chat_history()
-        if session_data['dialogue_state'] == 'EndState':
+        print ("SESSION_DATA: ", session_data)
+        if session_data['dialogue_state'] == 'GoodbyeState':
             return (
                 response_builder
                     .speak(response_text)
@@ -235,7 +234,6 @@ class LocalizationInterceptor(AbstractRequestInterceptor):
     def process(self, handler_input):
         # type: (HandlerInput) -> None
         locale = handler_input.request_envelope.request.locale
-        logger.info("Locale is {}".format(locale))
         i18n = gettext.translation(
             'data', localedir='locales', languages=[locale], fallback=True)
         handler_input.attributes_manager.request_attributes[

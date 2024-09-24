@@ -40,15 +40,17 @@ class ConversationManager:
         prev_state_obj = self.states[prev_state_str]
         
         # update the current state based on user's input
-        print (prev_state_str)
+        print ("previous state: ", prev_state_str)
         current_state_str = prev_state_obj.get_next_state(user_utterance, session_data)
+        print ('current state: ', current_state_str)
         current_state_obj = self.states[current_state_str]
-
+        print ('here 2')
         # Process the current state and get the response
         response_text = current_state_obj.get_speech(user_utterance, session_data)
+        print ('here3', response_text)
         response_builder = current_state_obj.render_display(response_builder, user_utterance, response_text, session_data)
-    
+        print ('here4')
         # Call update_session_data 
-        current_state_obj.update_session_data(session_data)
+        current_state_obj.update_session_data(user_utterance, response_text, session_data)
         
         return response_text, response_builder
