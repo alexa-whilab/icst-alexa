@@ -36,7 +36,7 @@ class WeatherDiscussionState(BaseState):
             logger.info('%s %s %s', self.name, 'get_next_state', response)
             if response == "True":
                 return "WeatherDiscussionStateTail"
-        return "WeatherDiscussionState"
+        return self.name
     
     def update_session_data(self, session_data):
         # Custom update logic
@@ -63,7 +63,7 @@ class WeatherDiscussionStateTail(BaseState):
         response = YesNoAgent().generate_response_from_llm(prompt)
         logger.info('%s %s %s', self.name, 'get_next_state', response)
         if response == "True":
-            return "CSTDiscussionState"
+            return "ICSTActivityState"
         elif response == "False":
             return "EndState"
     
