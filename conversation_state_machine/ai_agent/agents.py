@@ -18,14 +18,14 @@ class WeatherDiscussionAgent(BaseAgent):
     def __init__(self):
         super().__init__()
     
-    def build_prompt(self, user_utterance, session_data, state):
+    def build_prompt(self, user_utterance, chat_history, state):
         self.system_prompt = agent_system_prompt.WEATHER_DISCUSSION_AGENT[state]
         prompt = [
             {"role": "system", "content": self.system_prompt}
         ]
-        parsed_conversation = self._parse_conversation_history(session_data.get('weather_chat_history', ""))
+        parsed_conversation = self._parse_conversation_history(chat_history)
         prompt.extend(parsed_conversation)
-        if "weather_chat_history" in session_data:
+        if chat_history != "":
             prompt.append({"role": "user", "content": user_utterance})
         print ("prompt", prompt)
         return prompt
@@ -35,15 +35,17 @@ class ICSTActivityAgent(BaseAgent):
     def __init__(self):
         super().__init__()
     
-    def build_prompt(self, user_utterance, session_data, state):
+    def build_prompt(self, user_utterance, chat_history, state):
         self.system_prompt = agent_system_prompt.ICST_ACTIVITY_AGENT[state]
         prompt = [
             {"role": "system", "content": self.system_prompt}
         ]
-        parsed_conversation = self._parse_conversation_history(session_data.get('iCST_chat_history', ""))
+        parsed_conversation = self._parse_conversation_history(chat_history)
         prompt.extend(parsed_conversation)
-        if "iCST_chat_history" in session_data:
+        if chat_history != "":
             prompt.append({"role": "user", "content": user_utterance})
+        else:
+            prompt.append({"role": "user", "content": " "})
         print ("prompt", prompt)
         return prompt
     
