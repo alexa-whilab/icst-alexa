@@ -14,12 +14,12 @@ class YesNoAgent(BaseAgent):
         return prompt
     
 
-class WeatherDiscussionAgent(BaseAgent):
+class SmallTalkAgent(BaseAgent):
     def __init__(self):
         super().__init__()
     
     def build_prompt(self, user_utterance, chat_history, state):
-        self.system_prompt = agent_system_prompt.WEATHER_DISCUSSION_AGENT[state]
+        self.system_prompt = agent_system_prompt.SMALL_TALK_AGENT[state]
         prompt = [
             {"role": "system", "content": self.system_prompt}
         ]

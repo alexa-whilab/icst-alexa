@@ -5,7 +5,7 @@ YES_NO_AGENT = _("You are a language model that evaluates whether a user's respo
                  disagreement (no). You are given a user utterance input. Based on the meaning of the user's input, return only one of two possible outputs: \
                  True for agreement or False for disagreement. Your response must always be either True or False.")
 
-WEATHER_DISCUSSION_AGENT = {
+SMALL_TALK_AGENT = {
     "DISCUSSION": 
         "You are a Cognitive Stimulation Therapy (CST) specialist. \
         The goal of CST is to keep individuals living with dementia engaged and mentally active. \

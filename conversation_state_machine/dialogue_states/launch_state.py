@@ -33,7 +33,7 @@ class LaunchState(BaseState):
         response = YesNoAgent().generate_response_from_llm(prompt)
         logger.info('%s %s %s', self.name, 'get_next_state', response)
         if response == "True":
-            return "WeatherDiscussionState"
+            return "SmallTalkState"
         elif response == "False":
             return "GoodbyeState"
         else:

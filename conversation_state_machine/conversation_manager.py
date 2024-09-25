@@ -1,5 +1,5 @@
 from .dialogue_states.launch_state import LaunchState
-from .dialogue_states.weather_discussion_state import WeatherDiscussionState, WeatherDiscussionStateTail
+from .dialogue_states.small_talk_state import SmallTalkState, SmallTalkStateTail
 from .dialogue_states.icst_state import ICSTActivityState
 from .dialogue_states.goodbye_state import GoodbyeState
 
@@ -8,8 +8,8 @@ class ConversationManager:
     def __init__(self):
         self.states = {
             "LaunchState": LaunchState(),
-            "WeatherDiscussionState": WeatherDiscussionState(), 
-            "WeatherDiscussionStateTail": WeatherDiscussionStateTail(),
+            "SmallTalkState": SmallTalkState(), 
+            "SmallTalkStateTail": SmallTalkStateTail(),
             "ICSTActivityState": ICSTActivityState(),
             "GoodbyeState": GoodbyeState()
         }
