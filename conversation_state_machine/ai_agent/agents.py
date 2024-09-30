@@ -29,7 +29,25 @@ class SmallTalkAgent(BaseAgent):
             prompt.append({"role": "user", "content": user_utterance})
         print ("prompt", prompt)
         return prompt
-        
+
+
+class OpenTalkAgent(BaseAgent):
+    def __init__(self):
+        super().__init__()
+    
+    def build_prompt(self, user_utterance, chat_history, state):
+        self.system_prompt = agent_system_prompt.OPEN_TALK_AGENT[state]
+        prompt = [
+            {"role": "system", "content": self.system_prompt}
+        ]
+        parsed_conversation = self._parse_conversation_history(chat_history)
+        prompt.extend(parsed_conversation)
+        if chat_history != "":
+            prompt.append({"role": "user", "content": user_utterance})
+        else:
+            prompt.append({"role": "user", "content": " "})
+        print ("prompt", prompt)
+        return prompt
 
 class ICSTActivityAgent(BaseAgent):
     def __init__(self):

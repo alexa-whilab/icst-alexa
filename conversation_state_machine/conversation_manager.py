@@ -1,5 +1,6 @@
 from .dialogue_states.launch_state import LaunchState
 from .dialogue_states.small_talk_state import SmallTalkState, SmallTalkStateTail
+from .dialogue_states.open_talk_state import OpenTalkState, OpenTalkStateHead, OpenTalkStateTail
 from .dialogue_states.icst_state import ICSTActivityState
 from .dialogue_states.goodbye_state import GoodbyeState
 
@@ -10,6 +11,9 @@ class ConversationManager:
             "LaunchState": LaunchState(),
             "SmallTalkState": SmallTalkState(), 
             "SmallTalkStateTail": SmallTalkStateTail(),
+            "OpenTalkStateHead": OpenTalkStateHead(),
+            "OpenTalkState": OpenTalkState(),
+            "OpenTalkStateTail": OpenTalkStateTail(),
             "ICSTActivityState": ICSTActivityState(),
             "GoodbyeState": GoodbyeState()
         }
@@ -35,7 +39,7 @@ class ConversationManager:
 
         """
         prev_state_str = session_data.get('dialogue_state', self.initial_state)
-        
+        session_data['prev_dialogue_state'] = prev_state_str
         # Get the previous state object
         prev_state_obj = self.states[prev_state_str]
         

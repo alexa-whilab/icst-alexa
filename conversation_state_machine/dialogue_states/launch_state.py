@@ -35,7 +35,7 @@ class LaunchState(BaseState):
         if response == "True":
             return "SmallTalkState"
         elif response == "False":
-            return "GoodbyeState"
+            return "OpenTalkState"
         else:
             return "LaunchState"
     
