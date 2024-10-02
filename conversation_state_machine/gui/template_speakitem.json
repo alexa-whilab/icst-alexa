@@ -1,0 +1,117 @@
+{
+    "type": "APL",
+    "version": "2024.2",
+    "theme": "dark",
+    "import": [
+        {
+            "name": "alexa-layouts",
+            "version": "1.7.0"
+        },
+        {
+            "name": "alexa-styles",
+            "version": "1.1.0"
+        }
+    ],
+    "styles": {
+        "karaokeStyle": {
+          "extends": "textStyleKaraoke",
+          "values": [
+            {
+              "color": "@colorText"
+            },
+            {
+              "when": "${state.karaoke}",
+              "color": "white"
+            },
+            {
+              "when": "${state.karaokeTarget}",
+              "color": "rgba(28,8,8,1)"
+            }
+          ]
+        }
+    },
+    "mainTemplate": {
+        "parameters": [
+            "LambdaData"
+        ],
+        "item": [
+            {
+                "type": "Container",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "AlexaBackground",
+                        "backgroundImageSource": "https://alexa-whilab.s3.us-east-2.amazonaws.com/iCST/gui/background_1.jpeg",
+                        "backgroundBlur": false,
+                        "backgroundScale": "best-fill",
+                        "overlayGradient": true
+                    },
+                    {
+                        "type": "Container",
+                        "height": "100vh",
+                        "width": "100vw",
+                        "position": "absolute",
+                        "items": [
+
+                            {
+                                "type": "ScrollView",
+                                "grow": 1,
+                                "paddingTop": "@spacingMedium",
+                                "paddingBottom": "${@spacing3XLarge + @spacingXSmall}",
+                                "paddingLeft": "@marginHorizontal",
+                                "paddingRight": "@marginHorizontal",
+                                "items": [
+                                    {
+                                        "type": "Text",
+                                        "id": "response_text",
+                                        "style": "karaokeStyle",
+                                        "text": "${LambdaData.properties.text}",
+                                        "speech": "${LambdaData.properties.text_speech}",
+                                        "textAlign": "left"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "onMount": [
+        {
+            "type": "Sequential",
+            "commands": [
+                {
+                    "type": "AnimateItem",
+                    "easing": "ease-in-out",
+                    "componentId": "APL_Page",
+                    "duration":1000,
+                      "value": [
+                      {
+                          "property": "opacity",
+                          "to": 1
+                      }
+                      ]
+                },
+                {
+                    "type": "Idle",
+                    "delay": 1000
+                },
+                {
+                    "type": "SpeakItem",
+                    "componentId": "response_text",
+                    "highlightMode": "line",
+                    "align": "first"
+                },
+                {
+                    "type": "Idle",
+                    "delay": 1000
+                },
+                {
+                    "type": "SendEvent",
+                    "arguments": ["speakCompleted"]
+                }           
+            ]
+        }
+    ]
+}

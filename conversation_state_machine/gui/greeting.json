@@ -50,7 +50,7 @@
                 "items": [
                     {
                          "type": "Image",
-                         "source": "https://alexa-whilab.s3.us-east-2.amazonaws.com/iCST/gui/background.jpg",
+                         "source": "https://alexa-whilab.s3.us-east-2.amazonaws.com/iCST/gui/background_1.jpeg",
                          "description": "background", 
                          "scale": "best-fill",
                          "width": "100vw",

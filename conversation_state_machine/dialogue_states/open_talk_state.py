@@ -1,7 +1,7 @@
 import logging
 from ..base_state import BaseState
 from ..ai_agent.agents import OpenTalkAgent, YesNoAgent
-from ..util import render_document, execute_command, animate_display_change
+from ..util import render_document, execute_command, animate_display_change, render_document_speakitem
 from alexa.util import ChatHistoryLogger
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,11 @@ class OpenTalkStateHead(BaseState):
         return response
     
     def render_display(self, response_builder, user_utterance, response_text, session_data=None):
-        return response_builder
+        return render_document_speakitem(response_builder = response_builder,
+                        token = 'background_1',
+                        document = "/gui/template_speakitem.json",
+                        response_text=response_text
+                        )
 
     def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition
@@ -49,7 +53,11 @@ class OpenTalkState(BaseState):
     
     def render_display(self, response_builder, user_utterance, response_text, session_data=None):
         apl_document_token = 'background_1' # defined in the LaunchState()
-        return response_builder
+        return render_document_speakitem(response_builder = response_builder,
+                        token = 'background_1',
+                        document = "/gui/template_speakitem.json",
+                        response_text=response_text
+                        )
 
     def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition
@@ -91,7 +99,11 @@ class OpenTalkStateTail(BaseState):
         return response
     
     def render_display(self, response_builder, user_utterance, response_text, session_data=None):
-        return response_builder
+        return render_document_speakitem(response_builder = response_builder,
+                        token = 'background_1',
+                        document = "/gui/template_speakitem.json",
+                        response_text=response_text
+                        )
 
     def get_next_state(self, user_utterance, session_data):
         # Custom logic: if session_data or user_input triggers a condition

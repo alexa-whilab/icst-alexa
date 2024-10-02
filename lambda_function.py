@@ -100,9 +100,23 @@ class InfoIntentHandler(AbstractRequestHandler):
         return (
             response_builder
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")
-                .speak(response_text).ask("")
                 .response
                 )
+
+class APLUserEventHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        # Handle the UserEvent triggered by the SendEvent command
+        return (is_request_type('Alexa.Presentation.APL.UserEvent')(handler_input) and 
+                handler_input.request_envelope.request.arguments[0] == "speakCompleted")
+
+    def handle(self, handler_input):
+        # After speakCompleted, start listening to user's response
+        return (
+            handler_input.response_builder
+            .speak(" ")
+            .ask(" ")
+            .response
+        )
 
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
@@ -242,6 +256,7 @@ class LocalizationInterceptor(AbstractRequestInterceptor):
 
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(InfoIntentHandler())
+sb.add_request_handler(APLUserEventHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(RepeatIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())

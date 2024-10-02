@@ -73,3 +73,28 @@ def animate_display_change(disappear_element_id=None, new_text_id = None, new_te
         }) 
     
     return command
+
+
+def render_document_speakitem(response_builder, token, document, response_text=""):
+    datasources = {
+        "LambdaData": {
+            "type": "object",
+            "properties": {
+                "text": response_text,
+                "text_ssml": "<speak>{}</speak>".format(response_text)
+            },
+            "transformers": [
+            {
+                "inputPath": "text_ssml",
+                "transformer": "ssmlToSpeech",
+                "outputName": "text_speech"
+            }
+            ]
+        }
+    }
+    response_builder.add_directive(
+    RenderDocumentDirective(
+        token = token,
+        document = load_apl_document(document),
+        datasources = datasources))
+    return response_builder
