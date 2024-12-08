@@ -104,10 +104,6 @@
                     "align": "first"
                 },
                 {
-                    "type": "Idle",
-                    "delay": 1000
-                },
-                {
                     "type": "SendEvent",
                     "arguments": ["speakCompleted"]
                 }           
