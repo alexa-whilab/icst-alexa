@@ -7,6 +7,7 @@ class YesNoAgent(BaseAgent):
         self.system_prompt = agent_system_prompt.YES_NO_AGENT
     
     def build_prompt(self, user_utterance):
+        user_utterance = " " if user_utterance is None else user_utterance
         prompt =[
             {"role": "system", "content": self.system_prompt},
             {"role": "user", "content": user_utterance}
@@ -19,6 +20,7 @@ class SmallTalkAgent(BaseAgent):
         super().__init__()
     
     def build_prompt(self, user_utterance, chat_history, state):
+        user_utterance = " " if user_utterance is None else user_utterance
         self.system_prompt = agent_system_prompt.SMALL_TALK_AGENT[state]
         prompt = [
             {"role": "system", "content": self.system_prompt}
@@ -36,6 +38,7 @@ class OpenTalkAgent(BaseAgent):
         super().__init__()
     
     def build_prompt(self, user_utterance, chat_history, state):
+        user_utterance = " " if user_utterance is None else user_utterance
         self.system_prompt = agent_system_prompt.OPEN_TALK_AGENT[state]
         prompt = [
             {"role": "system", "content": self.system_prompt}
@@ -54,6 +57,7 @@ class ICSTActivityAgent(BaseAgent):
         super().__init__()
     
     def build_prompt(self, user_utterance, chat_history, state):
+        user_utterance = " " if user_utterance is None else user_utterance
         self.system_prompt = agent_system_prompt.ICST_ACTIVITY_AGENT[state]
         prompt = [
             {"role": "system", "content": self.system_prompt}
@@ -72,6 +76,7 @@ class GoodbyeAgent(BaseAgent):
         super().__init__()
     
     def build_prompt(self, user_utterance, session_data):
+        user_utterance = " " if user_utterance is None else user_utterance
         self.system_prompt = agent_system_prompt.GOODBYE_AGENT
         prompt = [
             {"role": "system", "content": self.system_prompt}
